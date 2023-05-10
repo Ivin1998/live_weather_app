@@ -33,6 +33,7 @@ class Welcome extends CI_Controller {
 		$weather_data = json_decode($response,);
 	    $data = array('weather_data' => $weather_data);
 		echo json_encode($data);
+
 	}
 }
 ?>
