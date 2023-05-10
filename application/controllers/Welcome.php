@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+
 class Welcome extends CI_Controller {
 
 	/**
@@ -22,16 +23,22 @@ class Welcome extends CI_Controller {
 	{
 		$this->load->view('view');
 	}
-	public function get_weather()
-	{
-		$this->load->config('weather');
-		$api_key = $this->config->item('WEATHER_API_KEY');
-		$city = $this->input->post('city');
-		$url = 'https://api.openweathermap.org/data/2.5/weather?q='. urlencode($city).'&appid=' . $api_key;
-		$response = file_get_contents($url);
-		$weather_data = json_decode($response,);
-	    $data = array('weather_data' => $weather_data);
-		echo json_encode($data);
+	public function get_status()
+	{	
+		$pnr =$_GET['pnr'];
+		$url = 'https://real-time-pnr-status-api-for-indian-railways.p.rapidapi.com/indianrail/'.$pnr;
+		$this->load->library('Guzzleclient');
+
+		$client = new \GuzzleHttp\Client();
+		
+		$response = $client->request('GET', $url , [
+			'headers' => [
+				'X-RapidAPI-Host' => 'real-time-pnr-status-api-for-indian-railways.p.rapidapi.com',
+				'X-RapidAPI-Key' => 'f0142f16e1mshda4b3ea0f466ffcp186bc5jsna333d3538d57',
+			],
+		]);
+		
+	echo $response->getBody();
 
 	}
 }
